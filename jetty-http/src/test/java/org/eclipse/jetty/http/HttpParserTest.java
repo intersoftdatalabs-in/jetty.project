@@ -1077,6 +1077,48 @@ public class HttpParserTest
     }
 
     @Test
+    public void testChunkParseQuotedParams()
+    {
+        ByteBuffer buffer = BufferUtil.toBuffer(
+            "GET /chunk HTTP/1.0\r\n" +
+                "Header1: value1\r\n" +
+                "Transfer-Encoding: chunked\r\n" +
+                "\r\n" +
+                "a;name=\"foo;bar\\\"baz\"\r\n" +
+                "0123456789\r\n" +
+                "0\r\n" +
+                "\r\n");
+        HttpParser.RequestHandler handler = new Handler();
+        HttpParser parser = new HttpParser(handler);
+        parseAll(parser, buffer);
+
+        assertEquals("0123456789", _content);
+        assertTrue(_headerCompleted);
+        assertTrue(_messageCompleted);
+    }
+
+    @Test
+    public void testChunkParseUnclosedQuote()
+    {
+        ByteBuffer buffer = BufferUtil.toBuffer(
+            "GET /chunk HTTP/1.0\r\n" +
+                "Header1: value1\r\n" +
+                "Transfer-Encoding: chunked\r\n" +
+                "\r\n" +
+                "a;name=\"unclosed\r\n" +
+                "0123456789\r\n" +
+                "0\r\n" +
+                "\r\n");
+        HttpParser.RequestHandler handler = new Handler();
+        HttpParser parser = new HttpParser(handler);
+        parseAll(parser, buffer);
+
+        assertTrue(_early);
+        assertTrue(parser.isState(HttpParser.State.CLOSE));
+        assertFalse(_messageCompleted);
+    }
+
+    @Test
     public void testChunkParseTrailer()
     {
         ByteBuffer buffer = BufferUtil.toBuffer(

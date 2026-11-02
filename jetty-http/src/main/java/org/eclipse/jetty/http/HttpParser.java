@@ -179,6 +179,8 @@ public class HttpParser
     private int _chunkPosition;
     private boolean _headResponse;
     private boolean _cr;
+    private boolean _inQuote;
+    private boolean _escaped;
     private ByteBuffer _contentChunk;
     private Trie<HttpField> _fieldCache;
 
@@ -1778,6 +1780,8 @@ public class HttpParser
                             break;
 
                         case SPACE:
+                            _inQuote = false;
+                            _escaped = false;
                             setState(State.CHUNK_PARAMS);
                             break;
 
@@ -1790,6 +1794,8 @@ public class HttpParser
                             }
                             else
                             {
+                                _inQuote = (t.getChar() == '"');
+                                _escaped = false;
                                 setState(State.CHUNK_PARAMS);
                             }
                     }
@@ -1802,20 +1808,31 @@ public class HttpParser
                     if (t == null)
                         break;
 
-                    switch (t.getType())
+                    if (_escaped)
                     {
-                        case LF:
-                            if (_chunkLength == 0)
-                            {
-                                setState(State.TRAILER);
-                                if (_handler.contentComplete())
-                                    return true;
-                            }
-                            else
-                                setState(State.CHUNK);
-                            break;
-                        default:
-                            break; // TODO review
+                        _escaped = false;
+                    }
+                    else if (t.getChar() == '\\' && _inQuote)
+                    {
+                        _escaped = true;
+                    }
+                    else if (t.getChar() == '"')
+                    {
+                        _inQuote = !_inQuote;
+                    }
+                    else if (t.getType() == HttpTokens.Type.LF)
+                    {
+                        if (_inQuote)
+                            throw new BadMessageException(HttpStatus.BAD_REQUEST_400, "Bad chunk parameter: unclosed quote");
+
+                        if (_chunkLength == 0)
+                        {
+                            setState(State.TRAILER);
+                            if (_handler.contentComplete())
+                                return true;
+                        }
+                        else
+                            setState(State.CHUNK);
                     }
                     break;
                 }
@@ -1904,6 +1921,8 @@ public class HttpParser
         _headerBytes = 0;
         _host = false;
         _headerComplete = false;
+        _inQuote = false;
+        _escaped = false;
     }
 
     protected void setState(State state)
