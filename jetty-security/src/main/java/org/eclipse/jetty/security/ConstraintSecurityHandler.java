@@ -496,6 +496,10 @@ public class ConstraintSecurityHandler extends SecurityHandler implements Constr
     protected void processConstraintMappingWithMethodOmissions(ConstraintMapping mapping, Map<String, RoleInfo> mappings)
     {
         String[] omissions = mapping.getMethodOmissions();
+        if (omissions == null)
+            return;
+        omissions = omissions.clone();
+        Arrays.sort(omissions);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < omissions.length; i++)
         {
@@ -504,9 +508,17 @@ public class ConstraintSecurityHandler extends SecurityHandler implements Constr
             sb.append(omissions[i]);
         }
         sb.append(OMISSION_SUFFIX);
-        RoleInfo ri = new RoleInfo();
-        mappings.put(sb.toString(), ri);
-        configureRoleInfo(ri, mapping);
+        String key = sb.toString();
+
+        RoleInfo ri = mappings.get(key);
+        if (ri == null)
+        {
+            ri = new RoleInfo();
+            mappings.put(key, ri);
+        }
+        RoleInfo newRi = new RoleInfo();
+        configureRoleInfo(newRi, mapping);
+        ri.combine(newRi);
     }
 
     /**
@@ -600,7 +612,7 @@ public class ConstraintSecurityHandler extends SecurityHandler implements Constr
                 //(ie matches because target method is not omitted, hence considered covered by the constraint)
                 for (Entry<String, RoleInfo> entry : mappings.entrySet())
                 {
-                    if (entry.getKey() != null && entry.getKey().endsWith(OMISSION_SUFFIX) && !entry.getKey().contains(httpMethod))
+                    if (entry.getKey() != null && entry.getKey().endsWith(OMISSION_SUFFIX) && !getOmittedMethods(entry.getKey()).contains(httpMethod))
                         applicableConstraints.add(entry.getValue());
                 }
 

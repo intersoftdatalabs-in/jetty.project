@@ -1950,6 +1950,68 @@ public class ConstraintTest
         assertThat(response, startsWith("HTTP/1.1 200 OK"));
     }
 
+    @Test
+    public void testMethodOmissionSubstringMatching() throws Exception
+    {
+        _security.setAuthenticator(new BasicAuthenticator());
+
+        Constraint auth = new Constraint();
+        auth.setName("auth");
+        auth.setAuthenticate(true);
+        auth.setRoles(new String[]{"user"});
+
+        // Omit TARGET method. A GET request contains "GET" which is a substring of "TARGET".
+        // With string contains(), "TARGET.omission".contains("GET") is true, incorrectly
+        // treating GET as omitted and failing to apply the constraint.
+        ConstraintMapping omitTarget = new ConstraintMapping();
+        omitTarget.setMethodOmissions(new String[]{"TARGET"});
+        omitTarget.setPathSpec("/omittest/*");
+        omitTarget.setConstraint(auth);
+
+        _security.addConstraintMapping(omitTarget);
+        _server.start();
+
+        // GET is not omitted, so it must be protected by the constraint
+        String response = _connector.getResponse("GET /ctx/omittest/info HTTP/1.0\r\n\r\n");
+        assertThat(response, startsWith("HTTP/1.1 401 Unauthorized"));
+
+        // TARGET is omitted, so uncovered/allowed (or handled according to uncovered policy)
+        response = _connector.getResponse("TARGET /ctx/omittest/info HTTP/1.0\r\n\r\n");
+        assertThat(response, startsWith("HTTP/1.1 200 OK"));
+    }
+
+    @Test
+    public void testMethodOmissionsCombining() throws Exception
+    {
+        _security.setAuthenticator(new BasicAuthenticator());
+
+        // Constraint 1: Auth required for all except HEAD
+        Constraint auth = new Constraint();
+        auth.setName("auth");
+        auth.setAuthenticate(true);
+        auth.setRoles(new String[]{"user"});
+        ConstraintMapping mapping1 = new ConstraintMapping();
+        mapping1.setMethodOmissions(new String[]{"HEAD"});
+        mapping1.setPathSpec("/combine/*");
+        mapping1.setConstraint(auth);
+
+        // Constraint 2: Forbidden for all except HEAD
+        Constraint forbid = new Constraint();
+        forbid.setName("forbid");
+        forbid.setAuthenticate(true);
+        ConstraintMapping mapping2 = new ConstraintMapping();
+        mapping2.setMethodOmissions(new String[]{"HEAD"});
+        mapping2.setPathSpec("/combine/*");
+        mapping2.setConstraint(_forbidConstraint);
+
+        _security.setConstraintMappings(new ConstraintMapping[]{mapping1, mapping2});
+        _server.start();
+
+        // When combined, forbidden constraint must take precedence
+        String response = _connector.getResponse("GET /ctx/combine/info HTTP/1.0\r\n\r\n");
+        assertThat(response, startsWith("HTTP/1.1 403 Forbidden"));
+    }
+
     private static String authBase64(String authorization)
     {
         byte[] raw = authorization.getBytes(ISO_8859_1);
