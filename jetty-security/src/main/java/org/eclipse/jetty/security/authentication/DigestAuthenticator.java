@@ -19,6 +19,11 @@
 package org.eclipse.jetty.security.authentication;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -200,6 +205,7 @@ public class DigestAuthenticator extends LoginAuthenticator
                     "\", nonce=\"" + newNonce(baseRequest) +
                     "\", algorithm=MD5" +
                     ", qop=\"auth\"" +
+                    ", charset=UTF-8" +
                     ", stale=" + stale);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 
@@ -344,43 +350,69 @@ public class DigestAuthenticator extends LoginAuthenticator
                 }
                 else
                 {
-                    // calc A1 digest
-                    md.update(username.getBytes(StandardCharsets.ISO_8859_1));
-                    md.update((byte)':');
-                    md.update(realm.getBytes(StandardCharsets.ISO_8859_1));
-                    md.update((byte)':');
-                    md.update(password.getBytes(StandardCharsets.ISO_8859_1));
-                    ha1 = md.digest();
+                    // Compute A1 digest with UTF-8 first (RFC 7616)
+                    String a1 = username + ":" + realm + ":" + password;
+                    ha1 = md.digest(a1.getBytes(StandardCharsets.UTF_8));
                 }
-                // calc A2 digest
+
+                // calc A2 digest with UTF-8
                 md.reset();
-                md.update(method.getBytes(StandardCharsets.ISO_8859_1));
-                md.update((byte)':');
-                md.update(uri.getBytes(StandardCharsets.ISO_8859_1));
-                byte[] ha2 = md.digest();
+                String a2 = method + ":" + uri;
+                byte[] ha2 = md.digest(a2.getBytes(StandardCharsets.UTF_8));
 
                 // calc digest
-                // request-digest = <"> < KD ( H(A1), unq(nonce-value) ":"
-                // nc-value ":" unq(cnonce-value) ":" unq(qop-value) ":" H(A2) )
-                // <">
-                // request-digest = <"> < KD ( H(A1), unq(nonce-value) ":" H(A2)
-                // ) > <">
+                byte[] expectedBytes;
+                if (qop != null)
+                {
+                    String expected = TypeUtil.toString(ha1, 16) + ":" +
+                        nonce + ":" + nc + ":" + cnonce + ":" + qop + ":" +
+                        TypeUtil.toString(ha2, 16);
+                    expectedBytes = expected.getBytes(StandardCharsets.UTF_8);
+                }
+                else
+                {
+                    String expected = TypeUtil.toString(ha1, 16) + ":" +
+                        nonce + ":" +
+                        TypeUtil.toString(ha2, 16);
+                    expectedBytes = expected.getBytes(StandardCharsets.UTF_8);
+                }
+                byte[] digest = md.digest(expectedBytes);
 
-                md.update(TypeUtil.toString(ha1, 16).getBytes(StandardCharsets.ISO_8859_1));
-                md.update((byte)':');
-                md.update(nonce.getBytes(StandardCharsets.ISO_8859_1));
-                md.update((byte)':');
-                md.update(nc.getBytes(StandardCharsets.ISO_8859_1));
-                md.update((byte)':');
-                md.update(cnonce.getBytes(StandardCharsets.ISO_8859_1));
-                md.update((byte)':');
-                md.update(qop.getBytes(StandardCharsets.ISO_8859_1));
-                md.update((byte)':');
-                md.update(TypeUtil.toString(ha2, 16).getBytes(StandardCharsets.ISO_8859_1));
-                byte[] digest = md.digest();
+                if (stringEquals(TypeUtil.toString(digest, 16).toLowerCase(), response == null ? null : response.toLowerCase()))
+                    return true;
 
-                // check digest
-                return stringEquals(TypeUtil.toString(digest, 16).toLowerCase(), response == null ? null : response.toLowerCase());
+                // Fallback: strict ISO-8859-1 for legacy clients without UTF-8 (RFC 2617).
+                // Reject characters that cannot be encoded in ISO-8859-1 without lossy substitution (CWE-173).
+                try
+                {
+                    md.reset();
+                    if (!(credentials instanceof Credential.MD5))
+                    {
+                        ha1 = md.digest(strictEncode(StandardCharsets.ISO_8859_1, username + ":" + realm + ":" + password));
+                    }
+                    ha2 = md.digest(strictEncode(StandardCharsets.ISO_8859_1, a2));
+                    if (qop != null)
+                    {
+                        String expected = TypeUtil.toString(ha1, 16) + ":" +
+                            nonce + ":" + nc + ":" + cnonce + ":" + qop + ":" +
+                            TypeUtil.toString(ha2, 16);
+                        expectedBytes = strictEncode(StandardCharsets.ISO_8859_1, expected);
+                    }
+                    else
+                    {
+                        String expected = TypeUtil.toString(ha1, 16) + ":" +
+                            nonce + ":" +
+                            TypeUtil.toString(ha2, 16);
+                        expectedBytes = strictEncode(StandardCharsets.ISO_8859_1, expected);
+                    }
+                    digest = md.digest(expectedBytes);
+                    return stringEquals(TypeUtil.toString(digest, 16).toLowerCase(), response == null ? null : response.toLowerCase());
+                }
+                catch (CharacterCodingException cce)
+                {
+                    // Non-Latin-1 characters cannot authenticate via ISO-8859-1 fallback
+                    return false;
+                }
             }
             catch (Exception e)
             {
@@ -388,6 +420,17 @@ public class DigestAuthenticator extends LoginAuthenticator
             }
 
             return false;
+        }
+
+        private byte[] strictEncode(Charset charset, String value) throws CharacterCodingException
+        {
+            ByteBuffer byteBuffer = charset.newEncoder()
+                .onMalformedInput(CodingErrorAction.REPORT)
+                .onUnmappableCharacter(CodingErrorAction.REPORT)
+                .encode(CharBuffer.wrap(value));
+            byte[] bytes = new byte[byteBuffer.remaining()];
+            byteBuffer.get(bytes);
+            return bytes;
         }
 
         @Override

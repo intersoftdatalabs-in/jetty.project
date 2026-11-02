@@ -19,6 +19,11 @@
 package org.eclipse.jetty.client.util;
 
 import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -123,7 +128,13 @@ public class DigestAuthentication extends AbstractAuthentication
         String realm = getRealm();
         if (ANY_REALM.equals(realm))
             realm = headerInfo.getRealm();
-        return new DigestResult(headerInfo.getHeader(), response.getContent(), realm, user, password, algorithm, nonce, clientQOP, opaque);
+
+        String charsetName = params.get("charset");
+        Charset charset = StringUtil.isBlank(charsetName) ? null : Charset.forName(charsetName);
+        if (charset != null && !"UTF-8".equalsIgnoreCase(charsetName))
+            charset = null;
+
+        return new DigestResult(headerInfo.getHeader(), response.getContent(), realm, user, password, algorithm, nonce, clientQOP, opaque, charset);
     }
 
     private MessageDigest getMessageDigest(String algorithm)
@@ -150,8 +161,14 @@ public class DigestAuthentication extends AbstractAuthentication
         private final String nonce;
         private final String qop;
         private final String opaque;
+        private final Charset charset;
 
         public DigestResult(HttpHeader header, byte[] content, String realm, String user, String password, String algorithm, String nonce, String qop, String opaque)
+        {
+            this(header, content, realm, user, password, algorithm, nonce, qop, opaque, null);
+        }
+
+        public DigestResult(HttpHeader header, byte[] content, String realm, String user, String password, String algorithm, String nonce, String qop, String opaque, Charset charset)
         {
             this.header = header;
             this.content = content;
@@ -162,6 +179,7 @@ public class DigestAuthentication extends AbstractAuthentication
             this.nonce = nonce;
             this.qop = qop;
             this.opaque = opaque;
+            this.charset = charset;
         }
 
         @Override
@@ -177,8 +195,10 @@ public class DigestAuthentication extends AbstractAuthentication
             if (digester == null)
                 return;
 
+            Charset cs = (this.charset != null) ? this.charset : StandardCharsets.ISO_8859_1;
+
             String a1 = user + ":" + realm + ":" + password;
-            String hashA1 = toHexString(digester.digest(a1.getBytes(StandardCharsets.ISO_8859_1)));
+            String hashA1 = toHexString(digester.digest(strictEncode(cs, a1)));
 
             String query = request.getQuery();
             String path = request.getPath();
@@ -186,7 +206,7 @@ public class DigestAuthentication extends AbstractAuthentication
             String a2 = request.getMethod() + ":" + uri;
             if ("auth-int".equals(qop))
                 a2 += ":" + toHexString(digester.digest(content));
-            String hashA2 = toHexString(digester.digest(a2.getBytes(StandardCharsets.ISO_8859_1)));
+            String hashA2 = toHexString(digester.digest(strictEncode(cs, a2)));
 
             String nonceCount;
             String clientNonce;
@@ -203,7 +223,7 @@ public class DigestAuthentication extends AbstractAuthentication
                 clientNonce = null;
                 a3 = hashA1 + ":" + nonce + ":" + hashA2;
             }
-            String hashA3 = toHexString(digester.digest(a3.getBytes(StandardCharsets.ISO_8859_1)));
+            String hashA3 = toHexString(digester.digest(strictEncode(cs, a3)));
 
             StringBuilder value = new StringBuilder("Digest");
             value.append(" username=\"").append(user).append("\"");
@@ -219,9 +239,29 @@ public class DigestAuthentication extends AbstractAuthentication
                 value.append(", nc=\"").append(nonceCount).append("\"");
                 value.append(", cnonce=\"").append(clientNonce).append("\"");
             }
+            if (this.charset != null)
+                value.append(", charset=\"").append(this.charset.name()).append("\"");
             value.append(", response=\"").append(hashA3).append("\"");
 
             request.header(header, value.toString());
+        }
+
+        private byte[] strictEncode(Charset charset, String value)
+        {
+            try
+            {
+                ByteBuffer byteBuffer = charset.newEncoder()
+                    .onMalformedInput(CodingErrorAction.REPORT)
+                    .onUnmappableCharacter(CodingErrorAction.REPORT)
+                    .encode(CharBuffer.wrap(value));
+                byte[] bytes = new byte[byteBuffer.remaining()];
+                byteBuffer.get(bytes);
+                return bytes;
+            }
+            catch (CharacterCodingException x)
+            {
+                throw new IllegalArgumentException("Cannot encode string with charset " + charset.name() + ": " + value, x);
+            }
         }
 
         private String nextNonceCount()

@@ -19,6 +19,8 @@
 package org.eclipse.jetty.security;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -120,6 +122,7 @@ public class ConstraintTest
         loginService.putUser("user", new Password("password"), new String[]{"user"});
         loginService.putUser("user2", new Password("password"), new String[]{"user"});
         loginService.putUser("admin", new Password("password"), new String[]{"user", "administrator"});
+        loginService.putUser("unicodeUser", new Password("密码123"), new String[]{"user"});
         loginService.putUser("user3", new Password("password"), new String[]{"foo"});
 
         contextHandler.setContextPath("/ctx");
@@ -780,20 +783,25 @@ public class ConstraintTest
 
     private String digest(String nonce, String username, String password, String uri, String nc) throws Exception
     {
+        return digest(nonce, username, password, uri, nc, ISO_8859_1);
+    }
+
+    private String digest(String nonce, String username, String password, String uri, String nc, Charset charset) throws Exception
+    {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] ha1;
         // calc A1 digest
-        md.update(username.getBytes(ISO_8859_1));
+        md.update(username.getBytes(charset));
         md.update((byte)':');
-        md.update("TestRealm".getBytes(ISO_8859_1));
+        md.update("TestRealm".getBytes(charset));
         md.update((byte)':');
-        md.update(password.getBytes(ISO_8859_1));
+        md.update(password.getBytes(charset));
         ha1 = md.digest();
         // calc A2 digest
         md.reset();
-        md.update("GET".getBytes(ISO_8859_1));
+        md.update("GET".getBytes(charset));
         md.update((byte)':');
-        md.update(uri.getBytes(ISO_8859_1));
+        md.update(uri.getBytes(charset));
         byte[] ha2 = md.digest();
 
         // calc digest
@@ -803,17 +811,17 @@ public class ConstraintTest
         // request-digest = <"> < KD ( H(A1), unq(nonce-value) ":" H(A2)
         // ) > <">
 
-        md.update(TypeUtil.toString(ha1, 16).getBytes(ISO_8859_1));
+        md.update(TypeUtil.toString(ha1, 16).getBytes(charset));
         md.update((byte)':');
-        md.update(nonce.getBytes(ISO_8859_1));
+        md.update(nonce.getBytes(charset));
         md.update((byte)':');
-        md.update(nc.getBytes(ISO_8859_1));
+        md.update(nc.getBytes(charset));
         md.update((byte)':');
-        md.update(CNONCE.getBytes(ISO_8859_1));
+        md.update(CNONCE.getBytes(charset));
         md.update((byte)':');
-        md.update("auth".getBytes(ISO_8859_1));
+        md.update("auth".getBytes(charset));
         md.update((byte)':');
-        md.update(TypeUtil.toString(ha2, 16).getBytes(ISO_8859_1));
+        md.update(TypeUtil.toString(ha2, 16).getBytes(charset));
         byte[] digest = md.digest();
 
         // check digest
@@ -903,6 +911,47 @@ public class ConstraintTest
             "\r\n");
         assertThat(response, startsWith("HTTP/1.1 401 Unauthorized"));
         assertThat(response, containsString("stale=true"));
+    }
+
+    @Test
+    public void testDigestUnicodePasswordAndCollisionRejection() throws Exception
+    {
+        DigestAuthenticator authenticator = new DigestAuthenticator();
+        authenticator.setMaxNonceCount(5);
+        _security.setAuthenticator(authenticator);
+        _server.start();
+
+        String response;
+        response = _connector.getResponse("GET /ctx/auth/info HTTP/1.0\r\n\r\n");
+        assertThat(response, startsWith("HTTP/1.1 401 Unauthorized"));
+        assertThat(response, containsString("WWW-Authenticate: Digest realm=\"TestRealm\""));
+
+        Pattern nonceP = Pattern.compile("nonce=\"([^\"]*)\",");
+        Matcher matcher = nonceP.matcher(response);
+        assertTrue(matcher.find());
+        String nonce = matcher.group(1);
+
+        // CVE-2026-10050: Attempt collision attack where non-Latin-1 chars are replaced with '?'
+        // Under vulnerable ISO-8859-1 conversion, "密码123" produced the same hash as "??123".
+        // The attacker with "??123" must be rejected.
+        String collisionDigest = digest(nonce, "unicodeUser", "??123", "/ctx/auth/info", "1", ISO_8859_1);
+        response = _connector.getResponse("GET /ctx/auth/info HTTP/1.0\r\n" +
+            "Authorization: Digest username=\"unicodeUser\", qop=auth, cnonce=\"1234567890\", uri=\"/ctx/auth/info\", realm=\"TestRealm\", " +
+            "nc=1, " +
+            "nonce=\"" + nonce + "\", " +
+            "response=\"" + collisionDigest + "\"\r\n" +
+            "\r\n");
+        assertThat(response, startsWith("HTTP/1.1 401 Unauthorized"));
+
+        // Legitimate authentication with UTF-8 password succeeds
+        String legitimateDigest = digest(nonce, "unicodeUser", "密码123", "/ctx/auth/info", "2", StandardCharsets.UTF_8);
+        response = _connector.getResponse("GET /ctx/auth/info HTTP/1.0\r\n" +
+            "Authorization: Digest username=\"unicodeUser\", qop=auth, cnonce=\"1234567890\", uri=\"/ctx/auth/info\", realm=\"TestRealm\", " +
+            "nc=2, " +
+            "nonce=\"" + nonce + "\", " +
+            "response=\"" + legitimateDigest + "\"\r\n" +
+            "\r\n");
+        assertThat(response, startsWith("HTTP/1.1 200 OK"));
     }
 
     @Test
