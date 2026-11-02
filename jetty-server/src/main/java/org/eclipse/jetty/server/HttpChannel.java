@@ -45,8 +45,10 @@ import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpGenerator;
 import org.eclipse.jetty.http.HttpHeader;
 import org.eclipse.jetty.http.HttpHeaderValue;
+import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpScheme;
 import org.eclipse.jetty.http.HttpStatus;
+import org.eclipse.jetty.http.HttpURI;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.http.MetaData;
 import org.eclipse.jetty.io.ByteBufferPool;
@@ -859,6 +861,8 @@ public class HttpChannel implements Runnable, HttpOutput.Interceptor
         request.setTrailerSupplier(_trailerSupplier);
         _request.setMetaData(request);
 
+        checkAuthorityHost(request);
+
         _request.setSecure(HttpScheme.HTTPS.is(request.getURI().getScheme()));
 
         _combinedListener.onRequestBegin(_request);
@@ -867,6 +871,55 @@ public class HttpChannel implements Runnable, HttpOutput.Interceptor
             LOG.debug("REQUEST for {} on {}{}{} {} {}{}{}", request.getURIString(), this, System.lineSeparator(),
                 request.getMethod(), request.getURIString(), request.getHttpVersion(), System.lineSeparator(),
                 request.getFields());
+    }
+
+    private void checkAuthorityHost(MetaData.Request request)
+    {
+        if (HttpMethod.CONNECT.is(request.getMethod()))
+            return;
+
+        HttpURI uri = request.getURI();
+        if (uri == null || uri.getAuthority() == null)
+            return;
+
+        String hostHeader = request.getFields().get(HttpHeader.HOST);
+        if (hostHeader == null)
+            return;
+
+        if (!authorityMatches(uri, hostHeader))
+            throw new BadMessageException(HttpStatus.BAD_REQUEST_400, "Authority!=Host");
+    }
+
+    private boolean authorityMatches(HttpURI uri, String hostHeader)
+    {
+        String authority = uri.getAuthority();
+        if (authority.equalsIgnoreCase(hostHeader))
+            return true;
+
+        try
+        {
+            HostPort hostPort = new HostPort(hostHeader);
+            String host = hostPort.getHost();
+            int port = hostPort.getPort();
+
+            String uriHost = uri.getHost();
+            int uriPort = uri.getPort();
+
+            if (!uriHost.equalsIgnoreCase(host))
+                return false;
+
+            int uriEffectivePort = (uriPort > 0) ? uriPort : (HttpScheme.HTTP.is(uri.getScheme()) ? 80 : (HttpScheme.HTTPS.is(uri.getScheme()) ? 443 : 0));
+            int hostEffectivePort = (port > 0) ? port : (HttpScheme.HTTP.is(uri.getScheme()) ? 80 : (HttpScheme.HTTPS.is(uri.getScheme()) ? 443 : 0));
+
+            if (uriEffectivePort > 0 && hostEffectivePort > 0)
+                return uriEffectivePort == hostEffectivePort;
+
+            return uriPort == port;
+        }
+        catch (Exception e)
+        {
+            throw new BadMessageException(HttpStatus.BAD_REQUEST_400, "Bad Host Header", e);
+        }
     }
 
     public boolean onContent(HttpInput.Content content)

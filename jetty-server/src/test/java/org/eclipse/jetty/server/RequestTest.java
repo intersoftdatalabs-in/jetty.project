@@ -982,12 +982,7 @@ public class RequestTest
                 "Host: wrong:666\n" +
                 "Connection: close\n" +
                 "\n");
-        i = 0;
-        assertThat(response, containsString("200 OK"));
-        assertEquals("http://myhost:8888/", results.get(i++));
-        assertEquals("0.0.0.0", results.get(i++));
-        assertEquals("myhost", results.get(i++));
-        assertEquals("8888", results.get(i++));
+        assertThat(response, containsString("400 Authority!=Host"));
 
         results.clear();
         response = _connector.getResponse(
@@ -2102,6 +2097,40 @@ public class RequestTest
         setComplianceModes(HttpCompliance.RFC7230);
         assertThat(_connector.getResponse(request), startsWith("HTTP/1.1 200"));
         setComplianceModes(HttpCompliance.RFC7230, HttpComplianceSection.NO_AMBIGUOUS_EMPTY_SEGMENT);
+        assertThat(_connector.getResponse(request), startsWith("HTTP/1.1 400"));
+    }
+
+    @Test
+    public void testAuthorityMatchesHostHeader() throws Exception
+    {
+        _handler._checker = (request, response) -> true;
+
+        // Matching authority and Host header -> 200 OK
+        String request = "GET http://example.com/path HTTP/1.1\r\n" +
+            "Host: example.com\r\n" +
+            "Connection: close\r\n" +
+            "\r\n";
+        assertThat(_connector.getResponse(request), startsWith("HTTP/1.1 200"));
+
+        // Matching with default port -> 200 OK
+        request = "GET http://example.com:80/path HTTP/1.1\r\n" +
+            "Host: example.com\r\n" +
+            "Connection: close\r\n" +
+            "\r\n";
+        assertThat(_connector.getResponse(request), startsWith("HTTP/1.1 200"));
+
+        // Mismatched authority and Host header -> 400 Bad Request
+        request = "GET http://evil.com/path HTTP/1.1\r\n" +
+            "Host: good.com\r\n" +
+            "Connection: close\r\n" +
+            "\r\n";
+        assertThat(_connector.getResponse(request), startsWith("HTTP/1.1 400"));
+
+        // Mismatched ports -> 400 Bad Request
+        request = "GET http://example.com:8080/path HTTP/1.1\r\n" +
+            "Host: example.com:9090\r\n" +
+            "Connection: close\r\n" +
+            "\r\n";
         assertThat(_connector.getResponse(request), startsWith("HTTP/1.1 400"));
     }
 
