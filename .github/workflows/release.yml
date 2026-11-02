@@ -1,0 +1,82 @@
+name: Release and Publish Distribution
+
+on:
+  push:
+    tags:
+      - 'v9.4.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version (e.g. 9.4.65)'
+        required: true
+        default: '9.4.65'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+          cache: 'maven'
+          server-id: 'github'
+
+      - name: Configure Maven Settings for GitHub Packages
+        run: |
+          mkdir -p ~/.m2
+          cat << 'EOF' > ~/.m2/settings.xml
+          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
+            <servers>
+              <server>
+                <id>github</id>
+                <username>${env.GITHUB_ACTOR}</username>
+                <password>${env.GITHUB_TOKEN}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
+      - name: Install build-resources
+        run: |
+          mvn clean install -f build-resources/pom.xml -DskipTests
+          mvn install -N -DskipTests
+
+      - name: Run Core Security Verification Tests
+        run: |
+          mvn test -pl jetty-http,jetty-security,jetty-server,jetty-proxy -Dtest=HttpURITest,ConstraintTest,RequestTest,ConnectHandlerTest,HttpParserTest -Dsurefire.failIfNoSpecifiedTests=false
+
+      - name: Build and Package Standalone Distribution
+        run: |
+          mvn clean install -pl jetty-distribution -am -DskipTests
+
+      - name: Deploy Core Modules to GitHub Packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mvn deploy -pl build-resources,jetty-util,jetty-jmx,jetty-io,jetty-http,jetty-xml,jetty-util-ajax,jetty-server,jetty-security,jetty-client,jetty-servlet,jetty-webapp,jetty-plus,jetty-annotations,jetty-proxy,jetty-rewrite,jetty-continuation,jetty-servlets,jetty-quickstart,jetty-jaas,jetty-deploy,jetty-start -DskipTests
+
+      - name: Generate Checksums
+        working-directory: jetty-distribution/target
+        run: |
+          sha256sum jetty-distribution-*.tar.gz jetty-distribution-*.zip > sha256sums.txt
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            jetty-distribution/target/jetty-distribution-*.tar.gz
+            jetty-distribution/target/jetty-distribution-*.zip
+            jetty-distribution/target/sha256sums.txt
+          generate_release_notes: true
