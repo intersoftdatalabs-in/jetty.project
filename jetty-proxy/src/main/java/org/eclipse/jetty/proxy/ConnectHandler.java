@@ -473,7 +473,7 @@ public class ConnectHandler extends HandlerWrapper
         String hostPort = host + ":" + port;
         if (!whiteList.isEmpty())
         {
-            if (!whiteList.contains(hostPort))
+            if (!matches(whiteList, hostPort))
             {
                 if (LOG.isDebugEnabled())
                     LOG.debug("Host {}:{} not whitelisted", host, port);
@@ -482,7 +482,7 @@ public class ConnectHandler extends HandlerWrapper
         }
         if (!blackList.isEmpty())
         {
-            if (blackList.contains(hostPort))
+            if (matches(blackList, hostPort))
             {
                 if (LOG.isDebugEnabled())
                     LOG.debug("Host {}:{} blacklisted", host, port);
@@ -490,6 +490,18 @@ public class ConnectHandler extends HandlerWrapper
             }
         }
         return true;
+    }
+
+    private boolean matches(Set<String> list, String hostPort)
+    {
+        if (list.contains(hostPort))
+            return true;
+        for (String entry : list)
+        {
+            if (entry != null && entry.equalsIgnoreCase(hostPort))
+                return true;
+        }
+        return false;
     }
 
     protected class ConnectManager extends SelectorManager

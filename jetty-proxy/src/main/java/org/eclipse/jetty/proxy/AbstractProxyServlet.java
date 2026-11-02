@@ -398,7 +398,7 @@ public abstract class AbstractProxyServlet extends HttpServlet
         String hostPort = host + ":" + port;
         if (!_whiteList.isEmpty())
         {
-            if (!_whiteList.contains(hostPort))
+            if (!matches(_whiteList, hostPort))
             {
                 if (_log.isDebugEnabled())
                     _log.debug("Host {}:{} not whitelisted", host, port);
@@ -407,7 +407,7 @@ public abstract class AbstractProxyServlet extends HttpServlet
         }
         if (!_blackList.isEmpty())
         {
-            if (_blackList.contains(hostPort))
+            if (matches(_blackList, hostPort))
             {
                 if (_log.isDebugEnabled())
                     _log.debug("Host {}:{} blacklisted", host, port);
@@ -415,6 +415,18 @@ public abstract class AbstractProxyServlet extends HttpServlet
             }
         }
         return true;
+    }
+
+    private boolean matches(Set<String> list, String hostPort)
+    {
+        if (list.contains(hostPort))
+            return true;
+        for (String entry : list)
+        {
+            if (entry != null && entry.equalsIgnoreCase(hostPort))
+                return true;
+        }
+        return false;
     }
 
     protected String rewriteTarget(HttpServletRequest clientRequest)

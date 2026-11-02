@@ -266,6 +266,33 @@ public class ConnectHandlerTest extends AbstractConnectHandlerTest
     }
 
     @Test
+    public void testProxyBlackListCaseInsensitive() throws Exception
+    {
+        int port = serverConnector.getLocalPort();
+        connectHandler.getBlackListHosts().add("localhost:" + port);
+
+        // Try with different casing
+        String request =
+            "CONNECT LocalHost:" + port + " HTTP/1.1\r\n" +
+                "Host: LocalHost:" + port + "\r\n" +
+                "\r\n";
+        try (Socket socket = newSocket())
+        {
+            OutputStream output = socket.getOutputStream();
+            InputStream input = socket.getInputStream();
+
+            output.write(request.getBytes(StandardCharsets.UTF_8));
+            output.flush();
+
+            // Expect 403 from the CONNECT request because case-insensitive match triggers blacklist
+            HttpTester.Input in = HttpTester.from(input);
+            HttpTester.Response response = HttpTester.parseResponse(in);
+            assertEquals(HttpStatus.FORBIDDEN_403, response.getStatus());
+            assertEquals(-1, input.read());
+        }
+    }
+
+    @Test
     public void testProxyAuthentication() throws Exception
     {
         disposeProxy();
