@@ -1,12 +1,12 @@
-# Eclipse Jetty 9.4 Extended Support Distribution Guide (Version 9.4.65)
+# Eclipse Jetty 9.4 Extended Support Distribution Guide (Version 9.4.65.1)
 
 This guide provides instructions for customers running legacy Java 8 applications who require continued support and vulnerability remediation for Eclipse Jetty 9.4.
 
-This distribution targets **Jetty 9.4.65** and is hosted on GitHub Packages and GitHub Releases by Intersoft Data Labs.
+This distribution targets **Jetty 9.4.65.1** (Revision 1 of the 9.4.65 extended support release line) and is hosted on GitHub Packages and GitHub Releases by Intersoft Data Labs.
 
 ---
 
-## 1. Vulnerability Fixes Included in 9.4.65
+## 1. Vulnerability Fixes Included in 9.4.65.1
 
 | CVE ID | Severity | Component | Summary |
 | :--- | :--- | :--- | :--- |
@@ -15,7 +15,7 @@ This distribution targets **Jetty 9.4.65** and is hosted on GitHub Packages and 
 | **CVE-2026-18659** | High | `jetty-security` | Method omission constraint matching substring flaw in `ConstraintSecurityHandler` (`!entry.getKey().contains(httpMethod)`). |
 | **CVE-2026-18662** | Medium | `jetty-security` | Method omission constraint combining bug in `ConstraintSecurityHandler` where consecutive omission definitions overwrote prior permissions. |
 | **CVE-2026-18660** | Medium | `jetty-proxy` | Case-sensitive hostname checking in `ConnectHandler` and `AbstractProxyServlet` allowing bypass of whitelist/blacklist proxy rules. |
-| **CVE-2026-6790** | Medium | `jetty-server` | URI Authority mismatch with `Host` header in `HttpChannel` violating RFC 9112 §3.2.1 request routing. |
+| **CVE-2026-6790** | Medium | `jetty-server` | URI Authority mismatch with `Host` header in `HttpChannel` violating RFC 9112 §3.2.1 request routing for absolute-form URIs. |
 | **CVE-2026-2332** | Medium | `jetty-http` | Chunk extension parameter quote parsing flaw in `HttpParser` allowing request smuggling via quoted strings. |
 | **CVE-2026-19203** | Medium | `jetty-http` | Unclosed quotes or embedded CRLF characters inside chunk parameters in `HttpParser`. |
 
@@ -30,7 +30,7 @@ This distribution targets **Jetty 9.4.65** and is hosted on GitHub Packages and 
 
 ## 3. Consuming Maven Artifacts via GitHub Packages
 
-The Maven artifacts for Jetty `9.4.65` are hosted on GitHub Packages under the repository `intersoftdatalabs-in/jetty.project`.
+The Maven artifacts for Jetty `9.4.65.1` are hosted on GitHub Packages under the repository `intersoftdatalabs-in/jetty.project`.
 
 ### 3.1 Maven Configuration
 
@@ -49,7 +49,7 @@ Add the repository to your `pom.xml`:
 </repositories>
 ```
 
-Add the dependencies using version `9.4.65`:
+Add the dependencies using version `9.4.65.1`:
 
 ```xml
 <dependencyManagement>
@@ -57,7 +57,7 @@ Add the dependencies using version `9.4.65`:
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-bom</artifactId>
-      <version>9.4.65</version>
+      <version>9.4.65.1</version>
       <type>pom</type>
       <scope>import</scope>
     </dependency>
@@ -68,12 +68,12 @@ Add the dependencies using version `9.4.65`:
   <dependency>
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-server</artifactId>
-    <version>9.4.65</version>
+    <version>9.4.65.1</version>
   </dependency>
   <dependency>
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-servlet</artifactId>
-    <version>9.4.65</version>
+    <version>9.4.65.1</version>
   </dependency>
 </dependencies>
 ```
@@ -114,8 +114,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.eclipse.jetty:jetty-server:9.4.65'
-    implementation 'org.eclipse.jetty:jetty-servlet:9.4.65'
+    implementation 'org.eclipse.jetty:jetty-server:9.4.65.1'
+    implementation 'org.eclipse.jetty:jetty-servlet:9.4.65.1'
 }
 ```
 
@@ -125,8 +125,8 @@ dependencies {
 
 For customers running standalone Jetty instances, binary distribution archives are provided:
 
-- `jetty-distribution-9.4.65.tar.gz`
-- `jetty-distribution-9.4.65.zip`
+- `jetty-distribution-9.4.65.1.tar.gz`
+- `jetty-distribution-9.4.65.1.zip`
 
 ### Verification:
 
@@ -137,7 +137,7 @@ sha256sum -c sha256sums.txt
 ### Starting the Server:
 
 ```bash
-tar -xzf jetty-distribution-9.4.65.tar.gz
-cd jetty-distribution-9.4.65
+tar -xzf jetty-distribution-9.4.65.1.tar.gz
+cd jetty-distribution-9.4.65.1
 java -jar start.jar
 ```
