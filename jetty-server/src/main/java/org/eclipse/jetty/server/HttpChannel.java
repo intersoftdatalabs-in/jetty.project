@@ -879,7 +879,7 @@ public class HttpChannel implements Runnable, HttpOutput.Interceptor
             return;
 
         HttpURI uri = request.getURI();
-        if (uri == null || uri.getAuthority() == null)
+        if (uri == null || !uri.isAbsolute() || uri.getAuthority() == null)
             return;
 
         String hostHeader = request.getFields().get(HttpHeader.HOST);
