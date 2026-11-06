@@ -60,11 +60,11 @@ jobs:
         run: |
           mvn clean install -pl jetty-distribution -am -DskipTests
 
-      - name: Deploy Core Modules to GitHub Packages
+      - name: Deploy Core Modules and Distribution to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mvn deploy -pl build-resources,jetty-util,jetty-jmx,jetty-io,jetty-http,jetty-xml,jetty-util-ajax,jetty-server,jetty-security,jetty-client,jetty-servlet,jetty-webapp,jetty-plus,jetty-annotations,jetty-proxy,jetty-rewrite,jetty-continuation,jetty-servlets,jetty-quickstart,jetty-jaas,jetty-deploy,jetty-start -am -DskipTests
+          mvn deploy -pl build-resources,jetty-util,jetty-jmx,jetty-io,jetty-http,jetty-xml,jetty-util-ajax,jetty-server,jetty-security,jetty-client,jetty-servlet,jetty-webapp,jetty-plus,jetty-annotations,jetty-proxy,jetty-rewrite,jetty-continuation,jetty-servlets,jetty-quickstart,jetty-jaas,jetty-deploy,jetty-start,jetty-home,jetty-distribution,jetty-bom -am -DskipTests
 
       - name: Generate Checksums
         working-directory: jetty-distribution/target
