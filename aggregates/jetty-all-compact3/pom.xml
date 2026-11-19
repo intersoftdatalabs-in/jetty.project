@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.eclipse.jetty</groupId>
+    <groupId>com.intsof.lts.jetty</groupId>
     <artifactId>jetty-project</artifactId>
-    <version>9.4.65.1</version>
+    <version>9.4.65.2</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.jetty.aggregate</groupId>
+  <groupId>com.intsof.lts.jetty.aggregate</groupId>
   <artifactId>jetty-all-compact3</artifactId>
   <name>Jetty :: Aggregate :: All core Jetty suitable for Java 8 compact 3 profile</name>
   <properties>
@@ -65,7 +65,7 @@
                 **/ResourceAnnotationHandler*.java,
                 **/ResourcesAnnotationHandler*.java
               </excludes>
-              <includeGroupIds>org.eclipse.jetty,org.eclipse.jetty.websocket</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty,com.intsof.lts.jetty.websocket</includeGroupIds>
               <excludeArtifactIds>javax,jetty-test-helper</excludeArtifactIds>
               <excludeGroupIds>javax,org.eclipse.jetty.orbit,org.slf4j,org.ow2.asm,org.junit,org.apiguardian,org.opentest4j,org.hamcrest</excludeGroupIds>
               <outputDirectory>${project.build.directory}/sources</outputDirectory>
@@ -115,79 +115,79 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-client</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-deploy</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-servlet</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>javax-websocket-server-impl</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-client</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-plus</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-annotations</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-util</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-jaspi</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-jndi</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-rewrite</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-servlets</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-quickstart</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>

@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.eclipse.jetty</groupId>
+    <groupId>com.intsof.lts.jetty</groupId>
     <artifactId>jetty-project</artifactId>
-    <version>9.4.65.1</version>
+    <version>9.4.65.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jetty-start</artifactId>
@@ -63,7 +63,7 @@
               <shadedClassifierName>shaded</shadedClassifierName>
               <filters>
                 <filter>
-                  <artifact>org.eclipse.jetty:jetty-util</artifact>
+                  <artifact>com.intsof.lts.jetty:jetty-util</artifact>
                   <includes>
                     <include>org/eclipse/jetty/util/JavaVersion*</include>
                     <include>org/eclipse/jetty/util/ManifestUtils*</include>
@@ -85,7 +85,7 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-util</artifactId>
       <version>${project.version}</version>
     </dependency>

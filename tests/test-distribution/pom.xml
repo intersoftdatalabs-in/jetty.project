@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>tests-parent</artifactId>
-    <groupId>org.eclipse.jetty.tests</groupId>
-    <version>9.4.65.1</version>
+    <groupId>com.intsof.lts.jetty.tests</groupId>
+    <version>9.4.65.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
@@ -31,7 +31,7 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-util</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -88,47 +88,47 @@
     </dependency>
 
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-distribution</artifactId>
       <version>${project.version}</version>
       <type>zip</type>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-client</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.http2</groupId>
+      <groupId>com.intsof.lts.jetty.http2</groupId>
       <artifactId>http2-http-client-transport</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.tests</groupId>
+      <groupId>com.intsof.lts.jetty.tests</groupId>
       <artifactId>test-simple-webapp</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.tests</groupId>
+      <groupId>com.intsof.lts.jetty.tests</groupId>
       <artifactId>test-simple-session-webapp</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.tests</groupId>
+      <groupId>com.intsof.lts.jetty.tests</groupId>
       <artifactId>test-weld-cdi-webapp</artifactId>
       <version>${project.version}</version>
       <type>war</type>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.tests</groupId>
+      <groupId>com.intsof.lts.jetty.tests</groupId>
       <artifactId>test-jetty-webapp</artifactId>
       <version>${project.version}</version>
       <type>war</type>
@@ -143,38 +143,38 @@
       <artifactId>junit-jupiter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-unixsocket</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-api</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-util-ajax</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-client</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.tests</groupId>
+      <groupId>com.intsof.lts.jetty.tests</groupId>
       <artifactId>test-felix-webapp</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>war</type>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>infinispan-remote-query</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>

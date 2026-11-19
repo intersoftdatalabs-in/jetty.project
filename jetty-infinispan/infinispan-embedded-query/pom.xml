@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.eclipse.jetty</groupId>
+    <groupId>com.intsof.lts.jetty</groupId>
     <artifactId>infinispan-parent</artifactId>
-    <version>9.4.65.1</version>
+    <version>9.4.65.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>infinispan-embedded-query</artifactId>
@@ -27,7 +27,7 @@
               <appendOutput>false</appendOutput>
               <outputFile>${project.build.directory}/deps.txt</outputFile>
               <sort>true</sort>
-              <excludeGroupIds>org.eclipse.jetty,javax.servlet,org.slf4j</excludeGroupIds>
+              <excludeGroupIds>com.intsof.lts.jetty,javax.servlet,org.slf4j</excludeGroupIds>
               <prependGroupId>true</prependGroupId>
               <includeScope>runtime</includeScope>
             </configuration>
@@ -72,7 +72,7 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>infinispan-common</artifactId>
       <version>${project.version}</version>
       <exclusions>

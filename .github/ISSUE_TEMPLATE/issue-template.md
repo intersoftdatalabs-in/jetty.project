@@ -1,4 +1,5 @@
 ---
+
 name: Issue
 about: Reporting bugs and problems in Eclipse Jetty
 title: ''
@@ -13,6 +14,4 @@ assignees: ''
 **OS type/version**
 
 **Description**
-
-
 

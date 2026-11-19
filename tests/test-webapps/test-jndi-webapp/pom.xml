@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eclipse.jetty.tests</groupId>
+    <groupId>com.intsof.lts.jetty.tests</groupId>
     <artifactId>test-webapps-parent</artifactId>
-    <version>9.4.65.1</version>
+    <version>9.4.65.2</version>
   </parent>
   <artifactId>test-jndi-webapp</artifactId>
   <name>Jetty Tests :: WebApp :: JNDI</name>
@@ -48,7 +48,7 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.eclipse.jetty.tests</groupId>
+                  <groupId>com.intsof.lts.jetty.tests</groupId>
                   <artifactId>test-mock-resources</artifactId>
                   <version>${project.version}</version>
                   <type>jar</type>
@@ -80,7 +80,7 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.eclipse.jetty</groupId>
+        <groupId>com.intsof.lts.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
@@ -93,7 +93,7 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>org.eclipse.jetty.tests</groupId>
+            <groupId>com.intsof.lts.jetty.tests</groupId>
             <artifactId>test-mock-resources</artifactId>
             <version>${project.version}</version>
           </dependency>

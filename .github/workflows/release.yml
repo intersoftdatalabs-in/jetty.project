@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release Version (e.g. 9.4.65)'
+        description: 'Release Version (e.g. 9.4.65.2)'
         required: true
-        default: '9.4.65'
+        default: '9.4.65.2'
 
 permissions:
   contents: write
@@ -29,42 +29,34 @@ jobs:
           java-version: '8'
           cache: 'maven'
           server-id: 'github'
+          server-username: GITHUB_ACTOR
+          server-password: GITHUB_TOKEN
 
-      - name: Configure Maven Settings for GitHub Packages
+      - name: Install build-resources and parent
         run: |
-          mkdir -p ~/.m2
-          cat << 'EOF' > ~/.m2/settings.xml
-          <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd">
-            <servers>
-              <server>
-                <id>github</id>
-                <username>${env.GITHUB_ACTOR}</username>
-                <password>${env.GITHUB_TOKEN}</password>
-              </server>
-            </servers>
-          </settings>
-          EOF
-
-      - name: Install build-resources
-        run: |
-          mvn clean install -f build-resources/pom.xml -DskipTests
-          mvn install -N -DskipTests
+          mvn clean install -f build-resources/pom.xml -DskipTests -B
+          mvn install -N -DskipTests -B
 
       - name: Run Core Security Verification Tests
         run: |
-          mvn test -pl jetty-http,jetty-security,jetty-server,jetty-proxy -am -Dtest=HttpURITest,ConstraintTest,RequestTest,ConnectHandlerTest,HttpParserTest -Dsurefire.failIfNoSpecifiedTests=false
+          mvn test -pl jetty-http,jetty-security,jetty-server,jetty-proxy -am -Dtest=HttpURITest,ConstraintTest,RequestTest,ConnectHandlerTest,HttpParserTest -Dsurefire.failIfNoSpecifiedTests=false -B
 
-      - name: Build and Package Standalone Distribution
+      - name: Build and Package BOM, Home, and Distribution
         run: |
-          mvn clean install -pl jetty-distribution -am -DskipTests
+          mvn clean install -pl jetty-bom,jetty-home,jetty-distribution -am -DskipTests -B
 
-      - name: Deploy Core Modules to GitHub Packages
+      - name: Verify Relocated Artifacts and Distribution Layout
+        run: |
+          test -f jetty-distribution/target/jetty-distribution-*.zip
+          unzip -l jetty-distribution/target/jetty-distribution-*.zip | grep -q 'lib/jetty-http-9.4.65.2.jar'
+
+      - name: Deploy Relocated Modules to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mvn deploy -pl build-resources,jetty-util,jetty-jmx,jetty-io,jetty-http,jetty-xml,jetty-util-ajax,jetty-server,jetty-security,jetty-client,jetty-servlet,jetty-webapp,jetty-plus,jetty-annotations,jetty-proxy,jetty-rewrite,jetty-continuation,jetty-servlets,jetty-quickstart,jetty-jaas,jetty-deploy,jetty-start -am -DskipTests
+          mvn deploy -N -DskipTests -B
+          mvn deploy -pl build-resources,jetty-util,jetty-jmx,jetty-io,jetty-http,jetty-xml,jetty-util-ajax,jetty-server,jetty-security,jetty-client,jetty-servlet,jetty-webapp,jetty-plus,jetty-annotations,jetty-proxy,jetty-rewrite,jetty-continuation,jetty-servlets,jetty-quickstart,jetty-jaas,jetty-deploy,jetty-start,jetty-jndi,apache-jsp,apache-jstl,jetty-websocket/websocket-api,jetty-websocket/websocket-common,jetty-websocket/websocket-client,jetty-websocket/websocket-servlet,jetty-websocket/websocket-server,jetty-websocket/javax-websocket-client-impl,jetty-websocket/javax-websocket-server-impl -am -DskipTests -B
+          mvn deploy -pl jetty-bom,jetty-home,jetty-distribution -DskipTests -B
 
       - name: Generate Checksums
         working-directory: jetty-distribution/target

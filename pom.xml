@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.eclipse.jetty</groupId>
+  <groupId>com.intsof.lts.jetty</groupId>
   <artifactId>jetty-project</artifactId>
-  <version>9.4.65.1</version>
+  <version>9.4.65.2</version>
   <name>Jetty :: Project</name>
   <description>The Eclipse Jetty Project</description>
   <packaging>pom</packaging>
@@ -286,8 +286,8 @@
                 <enforceBytecodeVersion>
                   <maxJdkVersion>1.8</maxJdkVersion>
                   <excludes>
-                    <exclude>org.eclipse.jetty:jetty-alpn-java-client</exclude>
-                    <exclude>org.eclipse.jetty:jetty-alpn-java-server</exclude>
+                    <exclude>com.intsof.lts.jetty:jetty-alpn-java-client</exclude>
+                    <exclude>com.intsof.lts.jetty:jetty-alpn-java-server</exclude>
                   </excludes>
                   <!--<ignoredScopes>
                     <ignoredScope>test</ignoredScope>
@@ -518,7 +518,7 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>org.eclipse.jetty</groupId>
+            <groupId>com.intsof.lts.jetty</groupId>
             <artifactId>build-resources</artifactId>
             <version>${project.version}</version>
           </dependency>
@@ -900,7 +900,7 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.eclipse.jetty</groupId>
+        <groupId>com.intsof.lts.jetty</groupId>
         <artifactId>jetty-server</artifactId>
         <version>${project.version}</version>
       </dependency>

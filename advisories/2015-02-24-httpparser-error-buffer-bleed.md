@@ -18,23 +18,22 @@ Discovered and Reported By:
 
 [JetLeak Vulnerability Remote Leakage of Shared Buffers in Jetty / blogs.gdsecurity.com](http://blog.gdssecurity.com/labs/2015/2/25/jetleak-vulnerability-remote-leakage-of-shared-buffers-in-je.html)
 
-
 Affected Versions of Jetty:
 ---------------------------
 
-  * 9.2.3.v20140905
-  * 9.2.4.v20141103
-  * 9.2.5.v20141112
-  * 9.2.6.v20141205
-  * 9.2.7.v20150116
-  * 9.2.8.v20150217
-  * 9.3.0.M0
-  * 9.3.0.M1
+* 9.2.3.v20140905
+* 9.2.4.v20141103
+* 9.2.5.v20141112
+* 9.2.6.v20141205
+* 9.2.7.v20150116
+* 9.2.8.v20150217
+* 9.3.0.M0
+* 9.3.0.M1
 
 Versions of Jetty Containing Fix:
---------------------------------
+---------------------------------
 
-  * 9.2.9.v20150224
+* 9.2.9.v20150224
 
 Patched version of jetty-http.jar:
 ----------------------------------
@@ -120,6 +119,4 @@ Server: Jetty(9.2.9.v20150224)
 ```
 
 Everyone is strongly encouraged to upgrade to Jetty 9.2.9.v20150224 immediately.
-
-
 

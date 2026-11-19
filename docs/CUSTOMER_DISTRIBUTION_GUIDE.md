@@ -8,16 +8,16 @@ This distribution targets **Jetty 9.4.65.1** (Revision 1 of the 9.4.65 extended 
 
 ## 1. Vulnerability Fixes Included in 9.4.65.1
 
-| CVE ID | Severity | Component | Summary |
-| :--- | :--- | :--- | :--- |
-| **CVE-2025-11143** | Medium | `jetty-http` | Path normalization in `HttpURI` resolving ambiguous encoded URI segments and directory traversal bypasses. |
-| **CVE-2026-10050** | High | `jetty-client`, `jetty-security` | Lossy ISO-8859-1 conversion in Digest Authentication leading to authentication bypass via unmappable characters (CWE-173). UTF-8 support added per RFC 7616. |
-| **CVE-2026-18659** | High | `jetty-security` | Method omission constraint matching substring flaw in `ConstraintSecurityHandler` (`!entry.getKey().contains(httpMethod)`). |
-| **CVE-2026-18662** | Medium | `jetty-security` | Method omission constraint combining bug in `ConstraintSecurityHandler` where consecutive omission definitions overwrote prior permissions. |
-| **CVE-2026-18660** | Medium | `jetty-proxy` | Case-sensitive hostname checking in `ConnectHandler` and `AbstractProxyServlet` allowing bypass of whitelist/blacklist proxy rules. |
-| **CVE-2026-6790** | Medium | `jetty-server` | URI Authority mismatch with `Host` header in `HttpChannel` violating RFC 9112 §3.2.1 request routing for absolute-form URIs. |
-| **CVE-2026-2332** | Medium | `jetty-http` | Chunk extension parameter quote parsing flaw in `HttpParser` allowing request smuggling via quoted strings. |
-| **CVE-2026-19203** | Medium | `jetty-http` | Unclosed quotes or embedded CRLF characters inside chunk parameters in `HttpParser`. |
+| CVE ID             | Severity | Component                        | Summary                                                                                                                                                      |
+|:-------------------|:---------|:---------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **CVE-2025-11143** | Medium   | `jetty-http`                     | Path normalization in `HttpURI` resolving ambiguous encoded URI segments and directory traversal bypasses.                                                   |
+| **CVE-2026-10050** | High     | `jetty-client`, `jetty-security` | Lossy ISO-8859-1 conversion in Digest Authentication leading to authentication bypass via unmappable characters (CWE-173). UTF-8 support added per RFC 7616. |
+| **CVE-2026-18659** | High     | `jetty-security`                 | Method omission constraint matching substring flaw in `ConstraintSecurityHandler` (`!entry.getKey().contains(httpMethod)`).                                  |
+| **CVE-2026-18662** | Medium   | `jetty-security`                 | Method omission constraint combining bug in `ConstraintSecurityHandler` where consecutive omission definitions overwrote prior permissions.                  |
+| **CVE-2026-18660** | Medium   | `jetty-proxy`                    | Case-sensitive hostname checking in `ConnectHandler` and `AbstractProxyServlet` allowing bypass of whitelist/blacklist proxy rules.                          |
+| **CVE-2026-6790**  | Medium   | `jetty-server`                   | URI Authority mismatch with `Host` header in `HttpChannel` violating RFC 9112 §3.2.1 request routing for absolute-form URIs.                                 |
+| **CVE-2026-2332**  | Medium   | `jetty-http`                     | Chunk extension parameter quote parsing flaw in `HttpParser` allowing request smuggling via quoted strings.                                                  |
+| **CVE-2026-19203** | Medium   | `jetty-http`                     | Unclosed quotes or embedded CRLF characters inside chunk parameters in `HttpParser`.                                                                         |
 
 ---
 
@@ -95,6 +95,7 @@ GitHub Packages requires authenticated access to download packages:
   </servers>
 </settings>
 ```
+
 *Note: Your Personal Access Token (PAT) requires the `read:packages` scope.*
 
 ---
@@ -141,3 +142,4 @@ tar -xzf jetty-distribution-9.4.65.1.tar.gz
 cd jetty-distribution-9.4.65.1
 java -jar start.jar
 ```
+

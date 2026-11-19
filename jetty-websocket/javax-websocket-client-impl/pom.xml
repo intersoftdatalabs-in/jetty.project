@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
-    <groupId>org.eclipse.jetty.websocket</groupId>
+    <groupId>com.intsof.lts.jetty.websocket</groupId>
     <artifactId>websocket-parent</artifactId>
-    <version>9.4.65.1</version>
+    <version>9.4.65.2</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -16,7 +16,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-client</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -25,19 +25,19 @@
       <artifactId>javax.websocket-client-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-server</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-server</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-common</artifactId>
       <version>${project.version}</version>
       <classifier>tests</classifier>

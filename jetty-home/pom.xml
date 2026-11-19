@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>jetty-project</artifactId>
-    <groupId>org.eclipse.jetty</groupId>
-    <version>9.4.65.1</version>
+    <groupId>com.intsof.lts.jetty</groupId>
+    <version>9.4.65.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>jetty-home</artifactId>
@@ -79,7 +79,7 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
+                  <groupId>com.intsof.lts.jetty</groupId>
                   <artifactId>jetty-project</artifactId>
                   <version>${project.version}</version>
                   <classifier>version</classifier>
@@ -89,7 +89,7 @@
                   <destFileName>VERSION.txt</destFileName>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
+                  <groupId>com.intsof.lts.jetty</groupId>
                   <artifactId>jetty-start</artifactId>
                   <version>${project.version}</version>
                   <classifier>shaded</classifier>
@@ -147,9 +147,9 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty</includeGroupIds>
               <excludeGroupIds>
-                org.eclipse.jetty.orbit,org.eclipse.jetty.http2,org.eclipse.jetty.websocket,org.eclipse.jetty.fcgi,org.eclipse.jetty.toolchain,org.apache.taglibs
+                org.eclipse.jetty.orbit,com.intsof.lts.jetty.http2,com.intsof.lts.jetty.websocket,com.intsof.lts.jetty.fcgi,org.eclipse.jetty.toolchain,org.apache.taglibs
               </excludeGroupIds>
               <excludeArtifactIds>
                 jetty-all,apache-jsp,apache-jstl,jetty-start,jetty-spring
@@ -165,9 +165,9 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty</includeGroupIds>
               <excludeGroupIds>
-                org.eclipse.jetty.orbit,org.eclipse.jetty.http2,org.eclipse.jetty.websocket,org.eclipse.jetty.fcgi,org.eclipse.jetty.toolchain,org.apache.taglibs
+                org.eclipse.jetty.orbit,com.intsof.lts.jetty.http2,com.intsof.lts.jetty.websocket,com.intsof.lts.jetty.fcgi,org.eclipse.jetty.toolchain,org.apache.taglibs
               </excludeGroupIds>
               <excludeArtifactIds>
                 jetty-all,apache-jsp,apache-jstl,jetty-start,jetty-spring
@@ -184,7 +184,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>javax.websocket,org.eclipse.jetty.websocket</includeGroupIds>
+              <includeGroupIds>javax.websocket,com.intsof.lts.jetty.websocket</includeGroupIds>
               <excludeArtifactIds>javax.websocket-client-api</excludeArtifactIds>
               <includeTypes>jar</includeTypes>
               <outputDirectory>${assembly-directory}/lib/websocket</outputDirectory>
@@ -197,7 +197,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>javax.websocket,org.eclipse.jetty.websocket</includeGroupIds>
+              <includeGroupIds>javax.websocket,com.intsof.lts.jetty.websocket</includeGroupIds>
               <excludeArtifactIds>javax.websocket-client-api</excludeArtifactIds>
               <includeTypes>jar</includeTypes>
               <classifier>sources</classifier>
@@ -211,7 +211,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty.http2</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty.http2</includeGroupIds>
               <includeArtifactIds>http2-hpack,http2-common,http2-server</includeArtifactIds>
               <includeTypes>jar</includeTypes>
               <outputDirectory>${assembly-directory}/lib/http2</outputDirectory>
@@ -224,7 +224,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty.http2</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty.http2</includeGroupIds>
               <includeArtifactIds>http2-hpack,http2-common,http2-server</includeArtifactIds>
               <includeTypes>jar</includeTypes>
               <classifier>sources</classifier>
@@ -238,7 +238,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty.fcgi</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty.fcgi</includeGroupIds>
               <includeTypes>jar</includeTypes>
               <outputDirectory>${assembly-directory}/lib/fcgi</outputDirectory>
             </configuration>
@@ -250,7 +250,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty.fcgi</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty.fcgi</includeGroupIds>
               <includeTypes>jar</includeTypes>
               <classifier>sources</classifier>
               <outputDirectory>${source-assembly-directory}/lib/fcgi</outputDirectory>
@@ -263,7 +263,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty</includeGroupIds>
               <includeArtifactIds>jetty-spring</includeArtifactIds>
               <includeTypes>jar</includeTypes>
               <outputDirectory>${assembly-directory}/lib/spring</outputDirectory>
@@ -276,7 +276,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty</includeGroupIds>
               <includeArtifactIds>jetty-spring</includeArtifactIds>
               <includeTypes>jar</includeTypes>
               <classifier>sources</classifier>
@@ -358,7 +358,7 @@
             </goals>
             <configuration>
               <includeGroupIds>
-                org.eclipse.jetty,org.eclipse.jetty.toolchain,org.mortbay.jasper,org.eclipse.jdt
+                com.intsof.lts.jetty,org.eclipse.jetty.toolchain,org.mortbay.jasper,org.eclipse.jdt
               </includeGroupIds>
               <includeArtifactIds>apache-jsp,apache-el,ecj</includeArtifactIds>
               <includeTypes>jar</includeTypes>
@@ -374,7 +374,7 @@
             </goals>
             <configuration>
               <includeGroupIds>
-                org.eclipse.jetty,org.eclipse.jetty.toolchain,org.mortbay.jasper,org.eclipse.jdt
+                com.intsof.lts.jetty,org.eclipse.jetty.toolchain,org.mortbay.jasper,org.eclipse.jdt
               </includeGroupIds>
               <includeArtifactIds>apache-jsp,apache-el,ecj</includeArtifactIds>
               <includeTypes>jar</includeTypes>
@@ -446,7 +446,7 @@
               <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <includeGroupIds>org.eclipse.jetty,org.eclipse.jetty.websocket</includeGroupIds>
+              <includeGroupIds>com.intsof.lts.jetty,com.intsof.lts.jetty.websocket</includeGroupIds>
               <excludeArtifactIds>infinispan-embedded,infinispan-remote,jetty-test-helper,alpn-api,javax.security.auth.message,javax.activation</excludeArtifactIds>
               <classifier>config</classifier>
               <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
@@ -463,14 +463,14 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
+                  <groupId>com.intsof.lts.jetty</groupId>
                   <artifactId>infinispan-embedded</artifactId>
                   <version>${project.version}</version>
                   <classifier>config</classifier>
                   <type>jar</type>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
+                  <groupId>com.intsof.lts.jetty</groupId>
                   <artifactId>infinispan-remote</artifactId>
                   <version>${project.version}</version>
                   <classifier>config</classifier>
@@ -578,88 +578,88 @@
 
     <!-- jetty deps -->
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-deploy</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-jmx</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-quickstart</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-start</artifactId>
       <version>${project.version}</version>
       <classifier>shaded</classifier>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-servlets</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-servlet</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-server</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>javax-websocket-server-impl</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>apache-jsp</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>apache-jstl</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-plus</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-client</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-continuation</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-proxy</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-unixsocket</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.fcgi</groupId>
+      <groupId>com.intsof.lts.jetty.fcgi</groupId>
       <artifactId>fcgi-server</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-spring</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -668,70 +668,70 @@
       <artifactId>jboss-logging</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-cdi</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-jaas</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-annotations</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-rewrite</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.http2</groupId>
+      <groupId>com.intsof.lts.jetty.http2</groupId>
       <artifactId>http2-server</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-alpn-server</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-alpn-openjdk8-server</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-openid</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-alpn-conscrypt-server</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-jaspi</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>infinispan-embedded</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>infinispan-embedded-query</artifactId>
       <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>infinispan-remote</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
@@ -744,28 +744,28 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>infinispan-remote-query</artifactId>
       <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-hazelcast</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.gcloud</groupId>
+      <groupId>com.intsof.lts.jetty.gcloud</groupId>
       <artifactId>jetty-gcloud-session-manager</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.memcached</groupId>
+      <groupId>com.intsof.lts.jetty.memcached</groupId>
       <artifactId>jetty-memcached-sessions</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-nosql</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -779,7 +779,7 @@
       </activation>
       <dependencies>
         <dependency>
-          <groupId>org.eclipse.jetty</groupId>
+          <groupId>com.intsof.lts.jetty</groupId>
           <artifactId>jetty-alpn-java-server</artifactId>
           <version>${project.version}</version>
         </dependency>

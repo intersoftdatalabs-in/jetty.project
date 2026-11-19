@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eclipse.jetty.tests</groupId>
+    <groupId>com.intsof.lts.jetty.tests</groupId>
     <artifactId>test-servlet-spec-parent</artifactId>
-    <version>9.4.65.1</version>
+    <version>9.4.65.2</version>
   </parent>
   <name>Jetty Tests :: Webapps :: Spec Webapp</name>
   <artifactId>test-spec-webapp</artifactId>
@@ -111,7 +111,7 @@
             <configuration>
               <artifactItems>
                 <artifactItem>
-                  <groupId>org.eclipse.jetty.tests</groupId>
+                  <groupId>com.intsof.lts.jetty.tests</groupId>
                   <artifactId>test-mock-resources</artifactId>
                   <version>${project.version}</version>
                   <type>jar</type>
@@ -125,7 +125,7 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.eclipse.jetty</groupId>
+        <groupId>com.intsof.lts.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
@@ -149,7 +149,7 @@
         </configuration>
         <dependencies>
           <dependency>
-            <groupId>org.eclipse.jetty.tests</groupId>
+            <groupId>com.intsof.lts.jetty.tests</groupId>
             <artifactId>test-mock-resources</artifactId>
             <version>${project.version}</version>
           </dependency>
@@ -168,7 +168,7 @@
               <rules>
                 <requireUpperBoundDeps>
                   <excludes combine.children="append">
-                    <exclude>org.eclipse.jetty:jetty-util</exclude>
+                    <exclude>com.intsof.lts.jetty:jetty-util</exclude>
                   </excludes>
                 </requireUpperBoundDeps>
               </rules>
@@ -186,7 +186,7 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-server</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
@@ -202,12 +202,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.tests</groupId>
+      <groupId>com.intsof.lts.jetty.tests</groupId>
       <artifactId>test-web-fragment</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.tests</groupId>
+      <groupId>com.intsof.lts.jetty.tests</groupId>
       <artifactId>test-container-initializer</artifactId>
       <version>${project.version}</version>
     </dependency>

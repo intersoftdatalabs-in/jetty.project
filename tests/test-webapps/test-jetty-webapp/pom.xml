@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">  <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.eclipse.jetty.tests</groupId>
+    <groupId>com.intsof.lts.jetty.tests</groupId>
     <artifactId>test-webapps-parent</artifactId>
-    <version>9.4.65.1</version>
+    <version>9.4.65.2</version>
   </parent>
   <artifactId>test-jetty-webapp</artifactId>
   <name>Test :: Jetty Test Webapp</name>
@@ -88,17 +88,17 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.eclipse.jetty</groupId>
+        <groupId>com.intsof.lts.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${project.version}</version>
         <dependencies>
           <dependency>
-            <groupId>org.eclipse.jetty</groupId>
+            <groupId>com.intsof.lts.jetty</groupId>
             <artifactId>jetty-client</artifactId>
             <version>${project.version}</version>
           </dependency>
           <dependency>
-            <groupId>org.eclipse.jetty</groupId>
+            <groupId>com.intsof.lts.jetty</groupId>
             <artifactId>jetty-servlets</artifactId>
             <version>${project.version}</version>
           </dependency>
@@ -129,12 +129,12 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-continuation</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-servlets</artifactId>
       <version>${project.version}</version>
     </dependency>
@@ -144,30 +144,30 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-servlet</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty.websocket</groupId>
+      <groupId>com.intsof.lts.jetty.websocket</groupId>
       <artifactId>websocket-server</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-webapp</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-jmx</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-servlet</artifactId>
       <version>${project.version}</version>
       <classifier>tests</classifier>
@@ -179,7 +179,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
+      <groupId>com.intsof.lts.jetty</groupId>
       <artifactId>jetty-server</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
@@ -208,7 +208,7 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.eclipse.jetty</groupId>
+            <groupId>com.intsof.lts.jetty</groupId>
             <artifactId>jetty-jspc-maven-plugin</artifactId>
             <version>${project.version}</version>
             <executions>

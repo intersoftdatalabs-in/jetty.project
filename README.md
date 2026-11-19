@@ -30,8 +30,8 @@ Building
 
 To build, use:
 
-``` shell
-  mvn clean install
+```shell
+mvn clean install
 ```
 
 The Jetty distribution will be built in `jetty-distribution/target/distribution`.
