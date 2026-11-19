@@ -54,7 +54,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mvn deploy -N -DskipTests -B
           mvn deploy -pl build-resources,jetty-util,jetty-jmx,jetty-io,jetty-http,jetty-xml,jetty-util-ajax,jetty-server,jetty-security,jetty-client,jetty-servlet,jetty-webapp,jetty-plus,jetty-annotations,jetty-proxy,jetty-rewrite,jetty-continuation,jetty-servlets,jetty-quickstart,jetty-jaas,jetty-deploy,jetty-start,jetty-jndi,apache-jsp,apache-jstl,jetty-websocket/websocket-api,jetty-websocket/websocket-common,jetty-websocket/websocket-client,jetty-websocket/websocket-servlet,jetty-websocket/websocket-server,jetty-websocket/javax-websocket-client-impl,jetty-websocket/javax-websocket-server-impl -am -DskipTests -B
           mvn deploy -pl jetty-bom,jetty-home,jetty-distribution -DskipTests -B
 
